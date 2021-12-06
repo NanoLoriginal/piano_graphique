@@ -7,7 +7,7 @@ class Tableau1 extends Phaser.Scene{
      * Précharge les assets
      */
     preload() {
-
+        this.image.load()
     }
 
     create(){
