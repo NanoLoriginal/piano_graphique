@@ -28,7 +28,7 @@ class Tableau1 extends Phaser.Scene {
         this.gcontainer.add(gsteve1);
         this.gcontainer.add(Steve)
         gsteve1.setScale(0.5,0.5)
-        gcochon1.setScale(0.5,0.5)
+        gcochon1.setScale(0.5,0.
 
 
 
@@ -40,6 +40,7 @@ class Tableau1 extends Phaser.Scene {
         //définit à quelles vitesse se déplacent nos différents plans
         this.bgcontainer.scrollFactorX=0.6;
         this.gcontainer.scrollFactorX=1;
+
 
 
     }
@@ -71,7 +72,7 @@ class Tableau1 extends Phaser.Scene {
 
     update(){
         //déplacement de la caméra
-        this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
+        //this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
 
 
     }
