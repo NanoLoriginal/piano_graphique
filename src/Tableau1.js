@@ -1,8 +1,8 @@
-
+let cursors;
+let dude;
+var platforms;
 
 class Tableau1 extends Phaser.Scene {
-    var
-    platforms;
 
     /**
      * Précharge les assets
@@ -18,6 +18,10 @@ class Tableau1 extends Phaser.Scene {
 
     create(){
 
+
+
+
+
         this.bgcontainer = this.add.container(0,0);
 
         let bglandscape1 = this.add.image(0,0,'land1').setOrigin(0,0);
@@ -27,18 +31,30 @@ class Tableau1 extends Phaser.Scene {
 
 
         this.gcontainer =this.add.container(0,0);
-        let gcochon1 = this.add.image(100,150,'cochon1').setOrigin(0,0);
-        let gsteve1 = this.add.image(200,150,'steve1').setOrigin(0,0);
-        let gplatform1 = this.add.image(200,550,'platform1').setOrigin(0.5,0.5);
-        let Steve = this.physics.add.sprite(300,150,'steve1');
-        this.gcontainer.add(gcochon1);
-        this.gcontainer.add(gsteve1);
-        this.gcontainer.add(Steve)
-        gsteve1.setScale(0.5,0.5)
-        gcochon1.setScale(0.5,0.5)
-        gplatform1.setScale(4,1)
+        //let gcochon1 = this.add.image(100,150,'cochon1').setOrigin(0,0);
+        dude = this.physics.add.image(200,150,'steve1').setOrigin(0,0);
 
-        this.gcontainer.add(gplatform1)
+
+
+
+        dude.setBounce(0,0.2);
+        dude.setCollideWorldBounds(true);
+        dude.body.setGravityY(300);
+
+        cursors = this.input.keyboard.createCursorKeys()
+
+        //this.gcontainer.add(gcochon1);
+        this.gcontainer.add(dude);
+
+
+        dude.setScale(0.5,0.5);
+        //gcochon1.setScale(0.5,0.5);
+
+
+
+
+        platforms = this.physics.add.staticGroup();
+        platforms.create(500,570, 'platform1').setScale(2.5).refreshBody();
 
 
 
@@ -52,7 +68,7 @@ class Tableau1 extends Phaser.Scene {
         this.gcontainer.scrollFactorX=1;
 
 
-
+        console.log(cursors)
     }
     initKeyboard(){
         let me=this;
@@ -81,8 +97,19 @@ class Tableau1 extends Phaser.Scene {
     }
 
     update(){
+        dude.setVelocityX(0)
         //déplacement de la caméra
         //this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
+        if (cursors.up.isDown){
+            dude.setVelocity(0,-300)
+        }
+        if (cursors.right.isDown){
+            dude.setVelocityX(100)
+        }
+        if (cursors.left.isDown){
+            dude.setVelocityX(-100)
+        }
+
 
 
     }
