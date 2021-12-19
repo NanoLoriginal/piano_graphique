@@ -7,9 +7,15 @@ class tableau extends Phaser.Scene {
      * Précharge les assets
      */
     preload() {
+        this.load.image('cochon1','assets/png/cochon1.png')
 
     }
     create(){
+        this.gcontainer =this.add.container(0,0)
+
+
+        let gcochon1 = this.add.image(100,50,'cochon1').setOrigin(0,0);
+        this.gcontainer.add(gcochon1)
 
     }
     initKeyboard(){
