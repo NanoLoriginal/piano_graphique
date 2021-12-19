@@ -23,8 +23,10 @@ class Tableau1 extends Phaser.Scene {
         this.gcontainer =this.add.container(0,0);
         let gcochon1 = this.add.image(100,150,'cochon1').setOrigin(0,0);
         let gsteve1 = this.add.image(200,150,'steve1').setOrigin(0,0);
+        let Steve = this.physics.add.sprite(300,150,'steve1');
         this.gcontainer.add(gcochon1);
         this.gcontainer.add(gsteve1);
+        this.gcontainer.add(Steve)
         gsteve1.setScale(0.5,0.5)
         gcochon1.setScale(0.5,0.5)
 
@@ -66,6 +68,7 @@ class Tableau1 extends Phaser.Scene {
             }
         });
     }
+
     update(){
         //déplacement de la caméra
         this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
