@@ -1,21 +1,49 @@
-/**
- * ALGO: ceci est une classe...
- * Vous verrez ça plus tard en détail avec Rémi, pour l'instant on n'a pas trop besoin de savoir à quoi ça sert.
- */
-class Tableau1 extends Phaser.Scene{
+
+
+class Tableau1 extends Phaser.Scene {
+
+
     /**
      * Précharge les assets
      */
     preload() {
-        this.image.load()
+        this.load.image('cochon1','assets/png/cochon1.png')
+
     }
-
     create(){
+        this.gcontainer =this.add.container(0,0)
 
+
+        let gcochon1 = this.add.image(100,50,'cochon1').setOrigin(0,0);
+        this.gcontainer.add(gcochon1)
+
+    }
+    initKeyboard(){
+        let me=this;
+        this.input.keyboard.on('keydown', function(kevent)
+        {
+            switch (kevent.keyCode)
+            {
+                case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                    me.speed=5;
+                    break;
+                case Phaser.Input.Keyboard.KeyCodes.LEFT:
+                    me.speed=-5;
+                    break;
+            }
+        });
+        this.input.keyboard.on('keyup', function(kevent)
+        {
+            switch (kevent.keyCode)
+            {
+                case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                case Phaser.Input.Keyboard.KeyCodes.LEFT:
+                    me.speed=0;
+                    break;
+            }
+        });
+    }
     update(){
-
-        }
-
 
     }
 }
