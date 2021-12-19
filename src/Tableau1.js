@@ -8,14 +8,33 @@ class Tableau1 extends Phaser.Scene {
      */
     preload() {
         this.load.image('cochon1','assets/png/cochon1.png')
-
+        this.load.image('land1','assets/png/landscape1.png')
     }
     create(){
-        this.gcontainer =this.add.container(0,0)
+        this.bgcontainer = this.add.container(0,0);
+
+        let bglandscape1 = this.add.image(0,0,'land1').setOrigin(0,0);
+        this.bgcontainer.add(bglandscape1);
+        bglandscape1.setScale(0.9,0.9)
 
 
+
+        this.gcontainer =this.add.container(0,0);
         let gcochon1 = this.add.image(100,50,'cochon1').setOrigin(0,0);
-        this.gcontainer.add(gcochon1)
+        this.gcontainer.add(gcochon1);
+
+
+
+
+        this.speed=0;
+        //initialise ce qui se passe avec le clavier
+        this.initKeyboard();
+        // Définit l'espace de déplacement de la caméra
+        this.cameras.main.setBounds(0, 0, 2000, 540);
+        //définit à quelles vitesse se déplacent nos différents plans
+        this.bgcontainer.scrollFactorX=0.6;
+        this.gcontainer.scrollFactorX=1;
+
 
     }
     initKeyboard(){
@@ -44,6 +63,9 @@ class Tableau1 extends Phaser.Scene {
         });
     }
     update(){
+        //déplacement de la caméra
+        this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
+
 
     }
 }
