@@ -28,7 +28,7 @@ class Tableau1 extends Phaser.Scene {
         this.gcontainer.add(gsteve1);
         this.gcontainer.add(Steve)
         gsteve1.setScale(0.5,0.5)
-        gcochon1.setScale(0.5,0.
+        gcochon1.setScale(0.5,0.5)
 
 
 
