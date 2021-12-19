@@ -1,6 +1,18 @@
 let cursors;
 let dude;
 var platforms;
+var cochons;
+var stars;
+
+function collectStar (dude, star)
+{
+    star.disableBody(true, true);
+}
+
+function spawnCochon(){
+    cochons.create(Phaser.Math.Between(0,600),400, 'cochon1').setScale(0.5,0.5).refreshBody();
+}
+
 
 class Tableau1 extends Phaser.Scene {
 
@@ -13,11 +25,11 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('steve1','assets/png/steve1.png')
         this.load.image('trait','assets/png/trait.png')
         this.load.image('platform1','assets/png/platform.png')
+        this.load.image('epee1','assets/png/epee1.png')
     }
 
 
     create(){
-
 
 
 
@@ -35,6 +47,9 @@ class Tableau1 extends Phaser.Scene {
         dude = this.physics.add.image(200,150,'steve1').setOrigin(0,0);
 
 
+        let gEpee = this.add.image(100,100,'epee1').setOrigin(0,0);
+        this.gcontainer.add(gEpee)
+
 
 
         dude.setBounce(0,0.2);
@@ -46,11 +61,14 @@ class Tableau1 extends Phaser.Scene {
         //this.gcontainer.add(gcochon1);
         this.gcontainer.add(dude);
 
-
+        gEpee.setScale(0.1,0.1);
         dude.setScale(0.5,0.5);
+
         //gcochon1.setScale(0.5,0.5);
 
 
+
+        cochons = this.physics.add.staticGroup();
 
 
         platforms = this.physics.add.staticGroup();
@@ -58,29 +76,53 @@ class Tableau1 extends Phaser.Scene {
 
 
 
+
         this.speed=0;
         //initialise ce qui se passe avec le clavier
         this.initKeyboard();
+
         // Définit l'espace de déplacement de la caméra
         this.cameras.main.setBounds(0, 0, 2000, 540);
         //définit à quelles vitesse se déplacent nos différents plans
-        this.bgcontainer.scrollFactorX=0.6;
-        this.gcontainer.scrollFactorX=1;
+        stars = this.physics.add.group({
+            key: 'star',
+            repeat: 11,
+            setXY: { x: 12, y: 0, stepX: 70 }
+        });
 
+        stars.children.iterate(function (child) {
 
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+        });
+        this.physics.add.collider(stars, platforms);
+        this.physics.add.overlap(dude, stars, collectStar, null, this);
+        this.physics.add.collider(dude, platforms);
         console.log(cursors)
     }
+
+
+
+
+
     initKeyboard(){
-        let me=this;
+        let me = this
         this.input.keyboard.on('keydown', function(kevent)
         {
             switch (kevent.keyCode)
             {
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
-                    me.speed=5;
+                    dude.setVelocityX(100);
+                    dude.setFlipX(1);
+                    spawnCochon()
+
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
-                    me.speed=-5;
+                    dude.setVelocityX(-100)
+                    dude.setFlipX(0);
+                    unspawnCochon()
+
+
                     break;
             }
         });
@@ -89,25 +131,35 @@ class Tableau1 extends Phaser.Scene {
             switch (kevent.keyCode)
             {
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                    dude.setVelocityX(0);
+
+
+
+                    break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
-                    me.speed=0;
+                    dude.setVelocityX(0);
                     break;
             }
         });
     }
 
     update(){
-        dude.setVelocityX(0)
+        dude.setVelocityX(0);
+
         //déplacement de la caméra
         //this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
         if (cursors.up.isDown){
-            dude.setVelocity(0,-300)
+            dude.setVelocityY(-300)
+
         }
         if (cursors.right.isDown){
-            dude.setVelocityX(100)
+            dude.setVelocityX(200)
+
+
         }
         if (cursors.left.isDown){
-            dude.setVelocityX(-100)
+            dude.setVelocityX(-200)
+
         }
 
 
