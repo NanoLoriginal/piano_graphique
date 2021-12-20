@@ -93,10 +93,11 @@ class Tableau1 extends Phaser.Scene {
         // Définit l'espace de déplacement de la caméra
         this.cameras.main.setBounds(0, 0, 2000, 540);
         //définit à quelles vitesse se déplacent nos différents plans
+
         stars = this.physics.add.group({
             key: 'porc1',
-            repeat: 11,
-            setXY: { x: 12, y: 0, stepX: 70 }
+            repeat: 5,
+            setXY: { x: 10, y: 0, stepX: 70 }
         });
 
         stars.children.iterate(function (child) {
@@ -104,14 +105,18 @@ class Tableau1 extends Phaser.Scene {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
         });
-
-
-
         this.physics.add.collider(stars, platforms);
+        this.physics.add.overlap(dude, stars, collectStar, null, this);
+
+
+
+
+
+
 
         this.physics.add.collider(cochon, platforms);
 
-        this.physics.add.overlap(dude, stars, collectStar, null, this);
+
 
 
 
@@ -134,16 +139,19 @@ class Tableau1 extends Phaser.Scene {
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     dude.setVelocityX(100);
                     dude.setFlipX(1);
-                    //spawnCochon()
-
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
                     dude.setVelocityX(-100)
                     dude.setFlipX(0);
-
-
-
                     break;
+
+                case Phaser.Input.Keyboard.KeyCodes.SPACE:
+                    if (dude.x>cochon.x-50 && dude.x<cochon.x+50){
+                        let mx = cochon.x
+                        cochon.visible = false
+                        cochon.disableBody(true)
+
+                    }
             }
         });
         this.input.keyboard.on('keyup', function(kevent)
@@ -181,8 +189,6 @@ class Tableau1 extends Phaser.Scene {
             dude.setVelocityX(-200)
 
         }
-        if (dude.x>cochon.x-50 && dude.x<cochon.x+50){
-            cochon.visible(false)
-        }
+
     }
 }
