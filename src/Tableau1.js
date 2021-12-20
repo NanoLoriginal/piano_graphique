@@ -22,7 +22,7 @@ function collectStar (dude, star)
     this.popsound.play()
 }
 
-function collectOrbs (dude, orb)
+function collectOrb (dude, orb)
 {
     orb.disableBody(true, true);
     this.expsound.play()
@@ -53,6 +53,7 @@ class Tableau1 extends Phaser.Scene {
         this.load.audio('pop', 'assets/png/pop.mp3')
         this.load.audio('exp', 'assets/png/exp.mp3')
         this.load.audio('sword', 'assets/png/sword.mp3')
+        this.load.image('bottle1', 'assets/png/bottle1.png')
     }
 
 
@@ -150,7 +151,8 @@ class Tableau1 extends Phaser.Scene {
 
 
         this.physics.add.collider(cochon, platforms);
-
+        this.physics.add.collider(orbs, platforms);
+        this.physics.add.overlap(dude, orbs, collectOrb, null, this);
 
 
 
@@ -301,7 +303,7 @@ class Tableau1 extends Phaser.Scene {
             orbs = this.physics.add.group({
                 key: 'bottle1',
                 repeat: 0,
-                setXY: { x: dude.x+60 , y: 50 , stepX: 0 }
+                setXY: { x: 60 , y: 20 , stepX: 0 }
             });
 
             orbs.children.iterate(function (child) {
@@ -309,8 +311,7 @@ class Tableau1 extends Phaser.Scene {
                 child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
             });
-            this.physics.add.collider(orbs, platforms);
-            this.physics.add.overlap(dude, orbs, collectOrbs, null, this);
+
 
         }
 
