@@ -1,7 +1,7 @@
 let cursors;
 let dude;
 var platforms;
-var cochons;
+var cochon;
 var stars;
 
 function collectStar (dude, star)
@@ -9,13 +9,11 @@ function collectStar (dude, star)
     star.disableBody(true, true);
 }
 
-function collectCochon (dude, cochon){
-    cochon.disableBody(true, true)
+function spawnCochon (){
+
 }
 
-function spawnCochon(){
-    cochons.create(Phaser.Math.Between(0,600),400, 'cochon1').setScale(0.5,0.5).refreshBody();
-}
+
 
 
 class Tableau1 extends Phaser.Scene {
@@ -49,9 +47,9 @@ class Tableau1 extends Phaser.Scene {
 
         this.gcontainer =this.add.container(0,0);
         //let gcochon1 = this.add.image(100,150,'cochon1').setOrigin(0,0);
+
+        cochon = this.physics.add.image(600,150,'cochon1').setOrigin(0,0);
         dude = this.physics.add.image(200,150,'steve1').setOrigin(0,0);
-
-
         let gEpee = this.add.image(100,100,'epee1').setOrigin(0,0);
         this.gcontainer.add(gEpee)
 
@@ -61,19 +59,25 @@ class Tableau1 extends Phaser.Scene {
         dude.setCollideWorldBounds(true);
         dude.body.setGravityY(300);
 
+        cochon.setBounce(0,0.2);
+        cochon.setCollideWorldBounds(true);
+        cochon.body.setGravityY(300);
+
         cursors = this.input.keyboard.createCursorKeys()
 
         //this.gcontainer.add(gcochon1);
+
+        this.gcontainer.add(cochon);
         this.gcontainer.add(dude);
 
         gEpee.setScale(0.1,0.1);
         dude.setScale(0.5,0.5);
+        cochon.setScale(0.5,0.5);
 
         //gcochon1.setScale(0.5,0.5);
 
 
 
-        //cochons = this.physics.add.staticGroup();
 
 
         platforms = this.physics.add.staticGroup();
@@ -101,22 +105,18 @@ class Tableau1 extends Phaser.Scene {
 
         });
 
-        cochons = this.physics.add.group({
-            key: 'cochon1',
-            repeat: 10,
-            setXY: { x: 12, y: 0, stepX: 70 }
-        });
 
-        cochons.children.iterate(function (child) {
-
-            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
-        });
 
         this.physics.add.collider(stars, platforms);
-        this.physics.add.collider(cochons, platforms);
+
+        this.physics.add.collider(cochon, platforms);
+
         this.physics.add.overlap(dude, stars, collectStar, null, this);
-        this.physics.add.overlap(dude, cochons, collectCochon, null, this);
+
+
+
+
+
         this.physics.add.collider(dude, platforms);
         console.log(cursors)
     }
@@ -181,8 +181,8 @@ class Tableau1 extends Phaser.Scene {
             dude.setVelocityX(-200)
 
         }
-
-
-
+        if (dude.x>cochon.x-50 && dude.x<cochon.x+50){
+            cochon.visible(false)
+        }
     }
 }
