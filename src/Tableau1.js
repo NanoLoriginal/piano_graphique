@@ -5,6 +5,7 @@ let dude;
 var platforms;
 var cochon;
 var stars;
+var orbs;
 
 
 
@@ -19,6 +20,12 @@ function collectStar (dude, star)
 {
     star.disableBody(true, true);
     this.popsound.play()
+}
+
+function collectOrbs (dude, orb)
+{
+    orb.disableBody(true, true);
+    this.expsound.play()
 }
 
 function spawnCochon (){
@@ -45,6 +52,7 @@ class Tableau1 extends Phaser.Scene {
         this.load.audio('pig', 'assets/png/pig.mp3')
         this.load.audio('pop', 'assets/png/pop.mp3')
         this.load.audio('exp', 'assets/png/exp.mp3')
+        this.load.audio('sword', 'assets/png/sword.mp3')
     }
 
 
@@ -136,6 +144,8 @@ class Tableau1 extends Phaser.Scene {
 
 
 
+
+
         //this.time.events.add(Phaser.Timer.SECOND + 5, disparitionEpee(),this);
 
 
@@ -179,6 +189,9 @@ class Tableau1 extends Phaser.Scene {
 
         this.expsound = this.sound.add('exp', {loop: false});
         this.expsound.volume = 1
+
+        this.swordsound = this.sound.add('sword', {loop: false});
+        this.swordsound.volume = 1
 
 
     }
@@ -257,6 +270,7 @@ class Tableau1 extends Phaser.Scene {
             dude.setVelocityY(-300)
 
 
+
         }
         if (cursors.D.isDown){
             dude.setVelocityX(200)
@@ -267,12 +281,12 @@ class Tableau1 extends Phaser.Scene {
             dude.setVelocityX(-200)
 
         }
-        if (cursors.SPACE.isDown && dude.x>cochon.x-50 && dude.x<cochon.x+50){
-            this.pigsound.play()
-            this.expsound.play()
-
-
-
+        if (cursors.SPACE.isDown ){
+            this.swordsound.play()
+            if (dude.x>cochon.x-50 && dude.x<cochon.x+50){
+                this.pigsound.play()
+                this.expsound.play()
+            }
 
         }
         if (cursors.R.isDown){
@@ -284,7 +298,20 @@ class Tableau1 extends Phaser.Scene {
             cochon.setScale(0.2,0.2);
         }
         if (cursors.E.isDown){
-            this.expsound.play()
+            orbs = this.physics.add.group({
+                key: 'bottle1',
+                repeat: 0,
+                setXY: { x: dude.x+60 , y: 50 , stepX: 0 }
+            });
+
+            orbs.children.iterate(function (child) {
+
+                child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+            });
+            this.physics.add.collider(orbs, platforms);
+            this.physics.add.overlap(dude, orbs, collectOrbs, null, this);
+
         }
 
 
