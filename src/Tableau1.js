@@ -9,6 +9,7 @@ var stars;
 
 
 
+
 function disparitionEpee(){
     epee.setPosition(-100,100)
 }
@@ -16,11 +17,13 @@ function disparitionEpee(){
 function collectStar (dude, star)
 {
     star.disableBody(true, true);
+    this.popsound.play()
 }
 
 function spawnCochon (){
 
 }
+
 
 
 
@@ -38,6 +41,8 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('platform1','assets/png/platform.png')
         this.load.image('epee1','assets/png/epee1.png')
         this.load.image('porc1','assets/png/porc.png')
+        this.load.audio('pig', 'assets/png/pig.mp3')
+        this.load.audio('pop', 'assets/png/pop.mp3')
     }
 
 
@@ -77,6 +82,8 @@ class Tableau1 extends Phaser.Scene {
         cochon.body.setGravityY(300);
 
         cursors = this.input.keyboard.createCursorKeys()
+        cursors = this.input.keyboard.addKeys('Z,Q,D,SPACE')
+
 
         //this.gcontainer.add(gcochon1);
 
@@ -100,8 +107,11 @@ class Tableau1 extends Phaser.Scene {
 
         this.speed=0;
         //initialise ce qui se passe avec le clavier
-        this.initKeyboard();
+
         this.creerClavier();
+
+        this.initKeyboard();
+        this.creerSons();
 
         // Définit l'espace de déplacement de la caméra
         this.cameras.main.setBounds(0, 0, 2000, 540);
@@ -156,15 +166,19 @@ class Tableau1 extends Phaser.Scene {
             objetGraphique.name = lettre;
         }
     }
-
     creerSons(){
 
 
-        this.pigsound = this.sound.add('errorsound', {loop: false});
+        this.pigsound = this.sound.add('pig', {loop: false});
         this.pigsound.volume = 1
+
+        this.popsound = this.sound.add('pop', {loop: false});
+        this.popsound.volume = 1
 
 
     }
+
+
 
     initKeyboard(){
         let me = this
@@ -185,11 +199,11 @@ class Tableau1 extends Phaser.Scene {
             switch (kevent.keyCode)
 
             {
-                case Phaser.Input.Keyboard.KeyCodes.RIGHT:
+                case Phaser.Input.Keyboard.KeyCodes.D:
                     dude.setVelocityX(100);
                     dude.setFlipX(1);
                     break;
-                case Phaser.Input.Keyboard.KeyCodes.LEFT:
+                case Phaser.Input.Keyboard.KeyCodes.Q:
                     dude.setVelocityX(-100)
                     dude.setFlipX(0);
                     break;
@@ -197,10 +211,14 @@ class Tableau1 extends Phaser.Scene {
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
 
 
+
                     if (dude.x>cochon.x-50 && dude.x<cochon.x+50){
                         let mx = cochon.x
                         cochon.visible = false
                         cochon.disableBody(true)
+
+
+
 
                     }
             }
@@ -218,6 +236,17 @@ class Tableau1 extends Phaser.Scene {
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
                     dude.setVelocityX(0);
                     break;
+
+                case Phaser.Input.Keyboard.KeyCodes.SPACE:
+                    cochon = this.physics.add.image(600,150,'cochon1').setOrigin(0,0);
+                    this.gcontainer.add(cochon)
+                    cochon.setBounce(0,0.2);
+                    cochon.setCollideWorldBounds(true);
+                    cochon.body.setGravityY(300);
+
+                    cochon.setScale(0.2,0.2);
+                    this.physics.add.collider(cochon, platforms);
+                    break;
             }
         });
     }
@@ -225,19 +254,26 @@ class Tableau1 extends Phaser.Scene {
     update(){
         dude.setVelocityX(0);
 
+
+
         //déplacement de la caméra
         //this.cameras.main.scrollX+=this.speed; // on aurait pu écrire : this.cameras.main.scrollX= this.cameras.main.scrollX + this.speed;
-        if (cursors.up.isDown){
+        if (cursors.Z.isDown){
             dude.setVelocityY(-300)
 
+
         }
-        if (cursors.right.isDown){
+        if (cursors.D.isDown){
             dude.setVelocityX(200)
 
 
         }
-        if (cursors.left.isDown){
+        if (cursors.Q.isDown){
             dude.setVelocityX(-200)
+
+        }
+        if (cursors.SPACE.isDown && dude.x>cochon.x-50 && dude.x<cochon.x+50){
+            this.pigsound.play()
 
         }
 
