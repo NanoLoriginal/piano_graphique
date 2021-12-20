@@ -105,6 +105,7 @@ class Tableau1 extends Phaser.Scene {
         dude.setScale(0.5,0.5);
         cochon.setScale(0.2,0.2);
 
+
         //gcochon1.setScale(0.5,0.5);
 
 
@@ -151,8 +152,7 @@ class Tableau1 extends Phaser.Scene {
 
 
         this.physics.add.collider(cochon, platforms);
-        this.physics.add.collider(orbs, platforms);
-        this.physics.add.overlap(dude, orbs, collectOrb, null, this);
+
 
 
 
@@ -300,18 +300,24 @@ class Tableau1 extends Phaser.Scene {
             cochon.setScale(0.2,0.2);
         }
         if (cursors.E.isDown){
+
             orbs = this.physics.add.group({
                 key: 'bottle1',
                 repeat: 0,
-                setXY: { x: 60 , y: 20 , stepX: 0 }
+                setXY: { x: dude.x+60 , y: 20 , stepX: 0 }
+
+
             });
 
             orbs.children.iterate(function (child) {
 
+                child.setScale(0.2,0.2);
                 child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
             });
 
+            this.physics.add.collider(orbs, platforms);
+            this.physics.add.overlap(dude, orbs, collectOrb, null, this);
 
         }
 
