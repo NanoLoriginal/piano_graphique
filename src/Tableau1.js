@@ -137,6 +137,7 @@ class Tableau1 extends Phaser.Scene {
 
         stars.children.iterate(function (child) {
 
+            child.setScale(0.5,0.5);
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
         });
