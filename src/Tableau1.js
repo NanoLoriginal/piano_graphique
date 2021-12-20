@@ -9,6 +9,10 @@ function collectStar (dude, star)
     star.disableBody(true, true);
 }
 
+function collectCochon (dude, cochon){
+    cochon.disableBody(true, true)
+}
+
 function spawnCochon(){
     cochons.create(Phaser.Math.Between(0,600),400, 'cochon1').setScale(0.5,0.5).refreshBody();
 }
@@ -26,6 +30,7 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('trait','assets/png/trait.png')
         this.load.image('platform1','assets/png/platform.png')
         this.load.image('epee1','assets/png/epee1.png')
+        this.load.image('porc1','assets/png/porc.png')
     }
 
 
@@ -68,7 +73,7 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-        cochons = this.physics.add.staticGroup();
+        //cochons = this.physics.add.staticGroup();
 
 
         platforms = this.physics.add.staticGroup();
@@ -85,7 +90,7 @@ class Tableau1 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 2000, 540);
         //définit à quelles vitesse se déplacent nos différents plans
         stars = this.physics.add.group({
-            key: 'star',
+            key: 'porc1',
             repeat: 11,
             setXY: { x: 12, y: 0, stepX: 70 }
         });
@@ -95,8 +100,23 @@ class Tableau1 extends Phaser.Scene {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
         });
+
+        cochons = this.physics.add.group({
+            key: 'cochon1',
+            repeat: 10,
+            setXY: { x: 12, y: 0, stepX: 70 }
+        });
+
+        cochons.children.iterate(function (child) {
+
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+        });
+
         this.physics.add.collider(stars, platforms);
+        this.physics.add.collider(cochons, platforms);
         this.physics.add.overlap(dude, stars, collectStar, null, this);
+        this.physics.add.overlap(dude, cochons, collectCochon, null, this);
         this.physics.add.collider(dude, platforms);
         console.log(cursors)
     }
@@ -114,13 +134,13 @@ class Tableau1 extends Phaser.Scene {
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     dude.setVelocityX(100);
                     dude.setFlipX(1);
-                    spawnCochon()
+                    //spawnCochon()
 
                     break;
                 case Phaser.Input.Keyboard.KeyCodes.LEFT:
                     dude.setVelocityX(-100)
                     dude.setFlipX(0);
-                    unspawnCochon()
+
 
 
                     break;
