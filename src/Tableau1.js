@@ -1,8 +1,17 @@
+
+
 let cursors;
 let dude;
 var platforms;
 var cochon;
 var stars;
+
+
+
+
+function disparitionEpee(){
+    epee.setPosition(-100,100)
+}
 
 function collectStar (dude, star)
 {
@@ -34,7 +43,9 @@ class Tableau1 extends Phaser.Scene {
 
     create(){
 
-
+        this.lettres = "space".split("")
+        console.log("liste des touches prises en charge...");
+        console.log(this.lettres);
 
 
         this.bgcontainer = this.add.container(0,0);
@@ -50,8 +61,10 @@ class Tableau1 extends Phaser.Scene {
 
         cochon = this.physics.add.image(600,150,'cochon1').setOrigin(0,0);
         dude = this.physics.add.image(200,150,'steve1').setOrigin(0,0);
-        let gEpee = this.add.image(100,100,'epee1').setOrigin(0,0);
-        this.gcontainer.add(gEpee)
+
+        //this.gcontainer.add(epee)
+        //epee = this.add.image(100,100,'epee1').setOrigin(0.5,0.5);
+        //epee.setScale(0.1,0.1);
 
 
 
@@ -70,9 +83,9 @@ class Tableau1 extends Phaser.Scene {
         this.gcontainer.add(cochon);
         this.gcontainer.add(dude);
 
-        gEpee.setScale(0.1,0.1);
+
         dude.setScale(0.5,0.5);
-        cochon.setScale(0.5,0.5);
+        cochon.setScale(0.2,0.2);
 
         //gcochon1.setScale(0.5,0.5);
 
@@ -85,10 +98,10 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-
         this.speed=0;
         //initialise ce qui se passe avec le clavier
         this.initKeyboard();
+        this.creerClavier();
 
         // Définit l'espace de déplacement de la caméra
         this.cameras.main.setBounds(0, 0, 2000, 540);
@@ -111,12 +124,10 @@ class Tableau1 extends Phaser.Scene {
 
 
 
-
+        //this.time.events.add(Phaser.Timer.SECOND + 5, disparitionEpee(),this);
 
 
         this.physics.add.collider(cochon, platforms);
-
-
 
 
 
@@ -128,13 +139,51 @@ class Tableau1 extends Phaser.Scene {
 
 
 
+    creerClavier() {
+        //feedback visuel de la pression des touches
+        let espacement = (this.game.config.width - 2) / this.lettres.length; // -2 c'est pour avoir une petite marge d'un pixel
+        let x = 1;
+        for (let lettre of this.lettres) {
+            let objetGraphique = this.add.text(x, 1, lettre, {
+                color: "#FFFFFF", //blanc
+                align: "center",
+                backgroundColor: "#345EE3", //bleu
+                fixedWidth: espacement - 1  // -1 c'est pour avoir une petite marge d'un pixel entre les lettres
+            });
+            //position X de la rouche suivante
+            x += espacement;
+            //donne un nom à l'élément graphique
+            objetGraphique.name = lettre;
+        }
+    }
 
+    creerSons(){
+
+
+        this.pigsound = this.sound.add('errorsound', {loop: false});
+        this.pigsound.volume = 1
+
+
+    }
 
     initKeyboard(){
         let me = this
         this.input.keyboard.on('keydown', function(kevent)
         {
+            console.log("keydown", kevent.key, kevent)
+            for (let lettre of me.lettres) {
+                if (kevent.key === lettre) {
+                    /**
+                     *
+                     * @type {Phaser.GameObjects.Text}
+                     */
+                    let objetGraphique = me.children.getByName(lettre);
+                    objetGraphique.toucheEnfoncee = true;
+
+                }
+            }
             switch (kevent.keyCode)
+
             {
                 case Phaser.Input.Keyboard.KeyCodes.RIGHT:
                     dude.setVelocityX(100);
@@ -146,6 +195,8 @@ class Tableau1 extends Phaser.Scene {
                     break;
 
                 case Phaser.Input.Keyboard.KeyCodes.SPACE:
+
+
                     if (dude.x>cochon.x-50 && dude.x<cochon.x+50){
                         let mx = cochon.x
                         cochon.visible = false
