@@ -10,6 +10,7 @@ var stars;
 
 
 
+
 function disparitionEpee(){
     epee.setPosition(-100,100)
 }
@@ -43,12 +44,13 @@ class Tableau1 extends Phaser.Scene {
         this.load.image('porc1','assets/png/porc.png')
         this.load.audio('pig', 'assets/png/pig.mp3')
         this.load.audio('pop', 'assets/png/pop.mp3')
+        this.load.audio('exp', 'assets/png/exp.mp3')
     }
 
 
     create(){
 
-        this.lettres = "space".split("")
+        this.lettres = "spaceZQSDER".split("")
         console.log("liste des touches prises en charge...");
         console.log(this.lettres);
 
@@ -82,7 +84,7 @@ class Tableau1 extends Phaser.Scene {
         cochon.body.setGravityY(300);
 
         cursors = this.input.keyboard.createCursorKeys()
-        cursors = this.input.keyboard.addKeys('Z,Q,D,SPACE')
+        cursors = this.input.keyboard.addKeys('Z,Q,D,SPACE,R,E')
 
 
         //this.gcontainer.add(gcochon1);
@@ -175,6 +177,9 @@ class Tableau1 extends Phaser.Scene {
         this.popsound = this.sound.add('pop', {loop: false});
         this.popsound.volume = 1
 
+        this.expsound = this.sound.add('exp', {loop: false});
+        this.expsound.volume = 1
+
 
     }
 
@@ -237,16 +242,6 @@ class Tableau1 extends Phaser.Scene {
                     dude.setVelocityX(0);
                     break;
 
-                case Phaser.Input.Keyboard.KeyCodes.SPACE:
-                    cochon = this.physics.add.image(600,150,'cochon1').setOrigin(0,0);
-                    this.gcontainer.add(cochon)
-                    cochon.setBounce(0,0.2);
-                    cochon.setCollideWorldBounds(true);
-                    cochon.body.setGravityY(300);
-
-                    cochon.setScale(0.2,0.2);
-                    this.physics.add.collider(cochon, platforms);
-                    break;
             }
         });
     }
@@ -274,8 +269,24 @@ class Tableau1 extends Phaser.Scene {
         }
         if (cursors.SPACE.isDown && dude.x>cochon.x-50 && dude.x<cochon.x+50){
             this.pigsound.play()
+            this.expsound.play()
+
+
+
 
         }
+        if (cursors.R.isDown){
+            cochon = this.physics.add.image(600,150,'cochon1').setOrigin(0,0);
+            cochon.setBounce(0,0.2);
+            cochon.setCollideWorldBounds(true);
+            cochon.body.setGravityY(300);
+            this.gcontainer.add(cochon);
+            cochon.setScale(0.2,0.2);
+        }
+        if (cursors.E.isDown){
+            this.expsound.play()
+        }
+
 
     }
 }
